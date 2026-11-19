@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080611">
+<title>JivanOS — Think · Create · Do More</title>
+<style>
+:root{--bg:#080611;--bg2:#100a20;--sf:rgba(255,255,255,.04);--sf2:rgba(255,255,255,.075);--bd:rgba(255,255,255,.085);--tx:#f3f4f6;--tx2:#9ca3af;--p:#8b5cf6;--p2:#a855f7;--bl:#5f8dff;--ok:#34d399;--warn:#fbbf24;--er:#f87171;--r:14px;--pad:22px;--sw:248px;--ease:.2s ease;color-scheme:dark}
+[data-theme=light]{--bg:#f5f3fb;--bg2:#fff;--sf:rgba(26,21,48,.04);--sf2:rgba(26,21,48,.08);--bd:rgba(26,21,48,.11);--tx:#1a1530;--tx2:#6b6585;color-scheme:light}
+.compact{--pad:14px;--r:10px}.nomotion *{transition:none!important;animation:none!important}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font:14.5px/1.55 Inter,"Segoe UI",system-ui,sans-serif;overflow:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(900px 460px at 82% -8%,rgba(124,77,230,.34),transparent 62%),radial-gradient(520px 520px at 96% 108%,rgba(95,141,255,.12),transparent 70%)}
+[data-theme=light] body::before{opacity:.45}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--p2);outline-offset:2px}
+.i{width:20px;height:20px;flex:none}
+.app{display:grid;grid-template-columns:var(--sw) 1fr;height:100vh;transition:grid-template-columns var(--ease)}
+.app.col{--sw:76px}
+/* sidebar */
+.side{background:color-mix(in srgb,var(--bg2) 82%,transparent);backdrop-filter:blur(18px);border-inline-end:1px solid var(--bd);padding:18px 12px;display:flex;flex-direction:column;gap:4px;min-height:0;overflow:visible;position:relative;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 8px 18px;font-size:20px;font-weight:650;letter-spacing:-.3px;white-space:nowrap}
+.brand svg{width:34px;height:34px;flex:none}
+.nb{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border:0;border-radius:12px;background:none;color:var(--tx2);text-align:start;white-space:nowrap;transition:background var(--ease),color var(--ease)}
+.nb:hover{background:var(--sf2);color:var(--tx)}
+.nb[aria-current=page]{background:linear-gradient(90deg,#6d3df0,#8b5cf6);color:#fff;box-shadow:0 8px 22px -10px rgba(124,58,237,.9)}
+.sp{flex:1}
+.col .nb span,.col .brand b,.col .uc>div,.col .uc>.i{display:none}
+.col .nb{justify-content:center}.col .brand{justify-content:center;padding-inline:0}
+.col .nb:hover::after{content:attr(data-tip);position:absolute;inset-inline-start:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--bg2);border:1px solid var(--bd);padding:4px 10px;border-radius:8px;font-size:12px;color:var(--tx);box-shadow:0 8px 24px #0008;z-index:50}
+.uc{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:1px solid var(--bd);border-radius:14px;background:var(--sf);text-align:start}
+.col .uc{justify-content:center;padding:8px}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--p),var(--bl));color:#fff;font-weight:600;flex:none}
+.uc small{display:block;color:var(--tx2);font-size:11.500px}
+/* topbar + page */
+.mainc{display:flex;flex-direction:column;min-width:0;min-height:0}
+.top{height:62px;display:flex;align-items:center;gap:10px;padding:0 var(--pad);border-bottom:1px solid var(--bd);flex:none}
+.top h2{font-size:16px;font-weight:600;flex:1;white-space:nowrap}
+.ib{display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:10px;background:none;color:var(--tx2);position:relative;transition:background var(--ease)}
+.ib:hover{background:var(--sf2);color:var(--tx)}
+.badge{position:absolute;top:5px;inset-inline-end:5px;min-width:16px;height:16px;border-radius:99px;background:var(--p2);color:#fff;font-size:10px;display:grid;place-items:center;padding:0 4px}
+.kbd{font-size:11px;color:var(--tx2);border:1px solid var(--bd);border-radius:7px;padding:2px 7px}
+.page{flex:1;min-height:0;overflow:auto;padding:var(--pad) calc(var(--pad)*1.6);animation:in .25s ease}
+.page.chatp{padding:0;overflow:hidden}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.wrap{max-width:1120px;margin:0 auto}
+h1{font-size:30px;font-weight:650;letter-spacing:-.6px}h3{font-size:16px;font-weight:600}
+.sub{color:var(--tx2)}.sec{display:flex;justify-content:space-between;align-items:center;margin:28px 0 12px}
+/* components */
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:var(--pad);backdrop-filter:blur(8px)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.tile{text-align:start;transition:transform var(--ease),border-color var(--ease);display:block;width:100%}
+.tile:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.55)}
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--p) 18%,transparent);color:var(--p2);margin-bottom:12px}
+.tile b{display:block;margin-bottom:2px}.tile small{color:var(--tx2);font-size:12.500px;line-height:1.45;display:block}
+.btn{border:0;border-radius:11px;padding:9px 18px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--p2),#6d3df0);box-shadow:0 6px 20px -8px rgba(124,58,237,.9);display:inline-flex;align-items:center;gap:8px}
+.btn.ghost{background:var(--sf2);color:var(--tx);box-shadow:none;border:1px solid var(--bd)}.btn.sm{padding:6px 13px;font-size:13px}.btn.dng{background:var(--er);box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;border:1px solid var(--bd);background:var(--sf);font-size:12.500px;color:var(--tx2)}
+button.chip:hover{color:var(--tx)}button.chip[aria-pressed=true]{background:var(--p);border-color:var(--p);color:#fff}
+.pill{font-size:11px;padding:2px 9px;border-radius:99px;font-weight:600}
+.hi{background:#f8717126;color:var(--er)}.me{background:#fbbf2426;color:var(--warn)}.lo{background:#34d39926;color:var(--ok)}.pv{background:#8b5cf626;color:var(--p2)}
+.bar{display:flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--bg2) 70%,transparent);border:1px solid var(--bd);border-radius:18px;padding:8px 8px 8px 14px;backdrop-filter:blur(10px);transition:border-color var(--ease),box-shadow var(--ease)}
+.bar:focus-within{border-color:var(--p);box-shadow:0 0 0 4px rgba(139,92,246,.14)}
+.bar input{flex:1;min-width:0;border:0;background:none;outline:0;padding:10px 6px;font-size:15px}
+.bar .send{width:42px;height:42px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--p2),#6d3df0);color:#fff;display:grid;place-items:center;flex:none;box-shadow:0 0 22px rgba(139,92,246,.45)}
+.bar .on{color:var(--p2);background:var(--sf2)}
+.row{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--bd);width:100%;border-inline:0;border-top:0;background:none;text-align:start}
+.row:last-child{border-bottom:0}.row .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .ico{width:32px;height:32px;margin:0;border-radius:9px;background:rgba(95,141,255,.16);color:var(--bl)}
+button.row:hover{background:var(--sf)}
+.empty{text-align:center;color:var(--tx2);padding:30px 0}
+.prog{height:6px;border-radius:6px;background:var(--bd);overflow:hidden}.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--p),var(--bl))}
+.feat{display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden;padding:0;min-height:190px}
+.feat>div:first-child{padding:26px}
+.art{position:relative;overflow:hidden;background:radial-gradient(circle at 58% 50%,#a45dff 0 2%,#5b24c2 4%,#22124a 22%,transparent 46%),linear-gradient(135deg,#17102c,#090713)}
+.art::before,.art::after{content:"";position:absolute;border:1px solid #a66aff66;border-radius:50%;width:240px;height:96px;top:46px;left:14%;transform:rotate(-24deg)}.art::after{transform:rotate(26deg);border-color:#7c8bff55}
+.orb{position:absolute;width:100px;height:100px;border-radius:50%;top:42px;left:44%;background:radial-gradient(circle at 32% 28%,#eadcff,#9b55ff 18%,#3c147c 54%,#080611 78%);box-shadow:0 0 70px #7025db88}
+/* chat */
+.chat{display:grid;grid-template-columns:290px 1fr;height:100%}
+.hist{border-inline-end:1px solid var(--bd);display:flex;flex-direction:column;min-height:0;padding:14px;gap:10px;background:color-mix(in srgb,var(--bg2) 55%,transparent)}
+.hl{flex:1;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.hi2{display:flex;align-items:center;gap:6px;border-radius:10px;padding:8px 10px;border:0;background:none;text-align:start;width:100%;color:var(--tx2)}
+.hi2:hover,.hi2[aria-current=true]{background:var(--sf2);color:var(--tx)}.hi2 span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cm{display:flex;flex-direction:column;min-width:0;min-height:0}
+.ch{display:flex;align-items:center;gap:10px;padding:12px var(--pad);border-bottom:1px solid var(--bd)}.ch h3{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.demo{background:rgba(251,191,36,.1);color:var(--warn);font-size:12px;padding:6px var(--pad);border-bottom:1px solid var(--bd)}
+.msgs{flex:1;overflow:auto;padding:22px var(--pad);display:flex;flex-direction:column;gap:18px}
+.m{display:flex;gap:12px;max-width:min(780px,100%);width:100%;margin-inline:auto}.m.u{justify-content:flex-end}
+.m .av{width:30px;height:30px;font-size:13px}
+.bub{padding:11px 15px;border-radius:16px;max-width:88%;word-break:break-word}
+.u .bub{background:color-mix(in srgb,var(--p) 30%,var(--bg2));border:1px solid rgba(139,92,246,.35)}
+.b .bub{background:var(--sf);border:1px solid var(--bd)}
+.bub ul{padding-inline-start:20px;margin:6px 0}.bub h3,.bub h4{margin:8px 0 4px}
+.bub pre{background:#05030c;border:1px solid var(--bd);border-radius:10px;margin:8px 0;overflow:hidden;direction:ltr;text-align:left}
+.bub pre div{display:flex;justify-content:space-between;align-items:center;padding:5px 12px;background:var(--sf2);font-size:11.500px;color:var(--tx2)}
+.bub pre code{display:block;padding:12px;overflow:auto;font:12.500px/1.6 Consolas,Menlo,monospace;color:#e9e5ff;white-space:pre}
+.ic2{background:var(--sf2);padding:1px 6px;border-radius:6px;font:12.500px Consolas,monospace}
+.meta{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.dots{display:inline-flex;gap:4px;padding:4px 0}.dots i{width:7px;height:7px;border-radius:50%;background:var(--tx2);animation:bl 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.comp{padding:12px var(--pad) 16px;max-width:calc(780px + var(--pad)*2);width:100%;margin-inline:auto}
+.chipf{display:inline-flex;gap:8px;align-items:center;margin-bottom:8px;padding:4px 6px 4px 12px;border:1px solid var(--bd);border-radius:99px;background:var(--sf);font-size:12.500px}
+.cs{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;gap:6px;padding:20px}
+/* dropdown, modal, toast */
+.dd{position:fixed;z-index:60;min-width:250px;background:var(--bg2);border:1px solid var(--bd);border-radius:14px;box-shadow:0 18px 50px #000a;padding:8px}
+.dd .row{padding:9px 10px;border-radius:9px}.dd .row:hover{background:var(--sf2)}.dd hr{border:0;border-top:1px solid var(--bd);margin:6px 0}
+.nt{align-items:flex-start}.nt.un::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--p2);margin-top:7px;flex:none}.nt .t{white-space:normal}
+.mb{position:fixed;inset:0;z-index:80;background:#05030bc9;display:grid;place-items:center;padding:18px;backdrop-filter:blur(3px)}
+.mo{width:min(520px,100%);max-height:88vh;overflow:auto;background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:24px;box-shadow:0 24px 80px #000b}
+.mo h3{font-size:19px;margin-bottom:6px}.mo .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.f{width:100%;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;outline:0;margin:6px 0 10px}.f:focus{border-color:var(--p)}
+label.l{font-size:12.500px;color:var(--tx2);display:block}
+.toast{position:fixed;bottom:24px;inset-inline:0;margin:auto;width:max-content;max-width:92%;z-index:90;background:var(--bg2);border:1px solid var(--p);padding:10px 18px;border-radius:12px;box-shadow:0 10px 30px #0009;opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s}.toast.on{opacity:1;transform:none}
+/* settings */
+.sg{display:grid;grid-template-columns:200px 1fr;gap:20px}
+.sn{display:flex;flex-direction:column;gap:4px}.sn button{border:0;background:none;text-align:start;padding:9px 12px;border-radius:10px;color:var(--tx2)}.sn button[aria-current=true]{background:var(--sf2);color:var(--tx)}
+.set{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--bd);flex-wrap:wrap}.set:last-child{border:0}.set small{display:block;color:var(--tx2);font-size:12.500px}
+.seg{display:flex;gap:4px}.seg button{border:1px solid var(--bd);background:var(--sf);padding:6px 14px;border-radius:9px}.seg button[aria-pressed=true]{background:var(--p);border-color:var(--p);color:#fff}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid transparent}.sw[aria-pressed=true]{border-color:var(--tx)}
+.tg{width:44px;height:25px;border-radius:99px;border:0;background:var(--bd);position:relative;flex:none;transition:background var(--ease)}.tg::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:inset-inline-start var(--ease)}.tg[aria-pressed=true]{background:var(--p)}.tg[aria-pressed=true]::after{inset-inline-start:22px}
+/* tasks */
+.tk{align-items:center}.tk input{width:18px;height:18px;accent-color:var(--p)}.dn .t{text-decoration:line-through;opacity:.5}
+.bn{display:none}
+/* responsive */
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:1fr 1fr}.chat{grid-template-columns:1fr}.hist{position:absolute;inset-block:62px 0;inset-inline-start:0;width:290px;z-index:8;transform:translateX(-102%);background:var(--bg2);transition:transform var(--ease)}[dir=rtl] .hist{transform:translateX(102%)}.hist.open{transform:none!important}.page.chatp{position:relative}}
+@media(max-width:820px){
+ .app{grid-template-columns:1fr;height:100dvh}.side{display:none}
+ .bn{display:flex;justify-content:space-around;border-top:1px solid var(--bd);background:color-mix(in srgb,var(--bg2) 92%,transparent);backdrop-filter:blur(14px);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+ .bn button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;color:var(--tx2);font-size:10.500px;padding:6px 0;border-radius:10px}.bn button[aria-current=page]{color:var(--p2)}
+ .app{grid-template-rows:1fr auto}.mainc{grid-row:1}.bn{grid-row:2}
+ .page{padding:16px}.top .kbd,#colb{display:none}h1{font-size:25px}.g4,.g3{grid-template-columns:1fr 1fr}.feat{grid-template-columns:1fr}.art{min-height:120px;order:-1}.sg{grid-template-columns:1fr}.sn{flex-direction:row;overflow:auto}
+ .grid{grid-template-columns:1fr 1fr}.bub{max-width:94%}
+}
+@media(max-width:430px){.grid,.g4,.g3{grid-template-columns:1fr}.quick{grid-template-columns:1fr 1fr!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4b5fd"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>
+<g id="gl"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></g></g>
+</defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.500"/><path d="M16 16l4.500 4.500"/></g></symbol>
+<symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.700 6.300a4 4 0 00-5 5L4 17l3 3 5.700-5.700a4 4 0 005-5l-2.500 2.500-2.200-.5-.5-2.200z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-mem" viewBox="0 0 24 24"><path d="M12 3a6 6 0 00-4 10.500V17h8v-3.500A6 6 0 0012 3zM9 20h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-task" viewBox="0 0 24 24"><path d="M5 12l4 4 10-10M4 20h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-disc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.500 8.500l-2 5-5 2 2-5z"/></g></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-pal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 100 18c1.500 0 2-1 1.500-2.200-.5-1.300.3-2.300 1.700-2.300H18a3 3 0 003-3c0-5-4-9-9-9z"/><path d="M8 11h.01M12 8h.01M16 11h.01"/></g></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1112 0v5l2 2H4zM10 21h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-clip" viewBox="0 0 24 24"><path d="M20 11.500l-8 8a5 5 0 01-7-7l8.500-8.500a3.500 3.500 0 015 5L10 17.500a2 2 0 01-3-3L14 7.500" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zM6 11a6 6 0 0012 0M12 17v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.500 3 14.500 0 18M12 3c-3 3.500-3 14.500 0 18"/></g></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.500 1.500M17.500 17.500L19 19M5 19l1.500-1.500M17.500 6.500L19 5"/></g></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14A8 8 0 1110 4a7 7 0 0010 10z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path d="M8 8l-5 4 5 4M16 8l5 4-5 4M14 5l-4 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M21 20H3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 114 2c-1 .8-1.500 1.200-1.500 2.500M12 17h.01"/></g></symbol>
+<symbol id="i-hist" viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9M3 4v5h5M12 8v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+<div class="app" id="app">
+ <aside class="side" id="side" aria-label="Primary"></aside>
+ <div class="mainc">
+  <header class="top">
+   <button class="ib" id="colb" data-act="collapse" aria-label="Collapse sidebar" title="Collapse sidebar (Ctrl+B)"><svg class="i"><use href="#i-menu"/></svg></button>
+   <h2 id="ptitle">Home</h2>
+   <button class="kbd ib" data-act="go" data-p="search" style="width:auto;padding:0 10px;height:30px" aria-label="Open search">Ctrl K</button>
+   <button class="ib" data-act="theme" id="thb" aria-label="Toggle theme"></button>
+   <button class="ib" data-act="notifs" id="ntb" aria-label="Notifications" aria-haspopup="true"><svg class="i"><use href="#i-bell"/></svg><span class="badge" id="nbd"></span></button>
+   <button class="av" data-act="profile" id="avb" aria-label="Profile menu" aria-haspopup="true" style="border:0"></button>
+  </header>
+  <main class="page" id="page" tabindex="-1"></main>
+ </div>
+ <nav class="bn" id="bn" aria-label="Mobile"></nav>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="fileIn" hidden>
+<script>
+(()=>{
+"use strict";
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ic=(n,c="")=>`<svg class="i ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const store={get(k,d){try{const v=localStorage.getItem("jv6."+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("jv6."+k,JSON.stringify(v))}catch(e){}}};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+/* ---------- state ---------- */
+const S=Object.assign({theme:"dark",accent:"#8b5cf6",col:false,name:"Mahdi",density:"comfortable",motion:true,toasts:true,badge:true,save:true},store.get("s",{}));
+const seedChats=[{id:"c1",title:"Ocean Pollution and Solutions",ts:Date.now()-12e4,m:[{r:"u",x:"What are the biggest sources of ocean pollution?"},{r:"b",x:"## Demo summary\n- **Plastics** from land-based sources\n- Oil spills and shipping runoff\n- Agricultural nutrients causing algal blooms"}]},{id:"c2",title:"3D Printing Guide",ts:Date.now()-9e5,m:[{r:"u",x:"Give me a quick 3D printing checklist."},{r:"b",x:"Demo checklist:\n- Level the bed\n- Dry the filament\n- Start with a calibration cube"}]},{id:"c3",title:"Marine Biology Summary",ts:Date.now()-36e5,m:[{r:"u",x:"Summarize coral reef ecosystems."},{r:"b",x:"Demo answer: coral reefs support roughly a quarter of marine species despite covering a tiny fraction of the ocean floor."}]}];
+let chats=store.get("chats",null)||seedChats,cc=null;
+let tasks=store.get("tasks",null)||[{id:"t1",t:"Review quarterly report",p:"hi",due:"Today",d:false},{id:"t2",t:"Order 3D printer filament",p:"me",due:"Tomorrow",d:false},{id:"t3",t:"Reply to the design team",p:"lo",due:"This week",d:true}];
+let mems=store.get("mems",null)||[{id:"m1",x:"Prefers concise answers with examples",c:"Preferences",i:3},{id:"m2",x:"Runs a small 3D-printing business",c:"Work",i:3},{id:"m3",x:"Birthday is in March",c:"Personal",i:2},{id:"m4",x:"Favorite programming language is Python",c:"Preferences",i:2}];
+let projs=store.get("projs",null)||[{id:"p1",n:"3D Printing Studio",d:"Orders, pricing and the print queue",pr:68,f:12,u:"2h ago",a:["Updated pricing sheet","Added 3 files","New task: restock filament"]},{id:"p2",n:"Marine Biology Report",d:"Research notes and summaries",pr:40,f:5,u:"Yesterday",a:["Imported 2 PDFs","Drafted introduction"]},{id:"p3",n:"Website Redesign",d:"Landing page and brand assets",pr:15,f:8,u:"3 days ago",a:["Created moodboard"]}];
+let notifs=store.get("notifs",null)||[{id:"n1",t:"Welcome to JivanOS",x:"This is a frontend prototype with demo data.",r:false,w:"now"},{id:"n2",t:"Task due today",x:"Review quarterly report",r:false,w:"1h ago"},{id:"n3",t:"Memory suggestion",x:"Save “Prefers concise answers”?",r:true,w:"Yesterday"}];
+const persist=()=>{store.set("s",S);store.set("tasks",tasks);store.set("mems",mems);store.set("projs",projs);store.set("notifs",notifs);if(S.save)store.set("chats",chats);else store.set("chats",null)};
+const TOOLS=[{n:"Writer",c:"Writing",i:"pen",d:"Draft emails, posts and documents in your tone.",p:"Help me write a short, friendly email to a client about a delayed order."},{n:"Summarizer",c:"Writing",i:"chart",d:"Condense long text into key points.",p:"Summarize the following text in five bullet points: "},{n:"Translator",c:"Writing",i:"globe",d:"Translate text while keeping the tone.",p:"Translate this paragraph into English and keep the formal tone: "},{n:"Code Assistant",c:"Coding",i:"code",d:"Write, explain and refactor code.",p:"Write a Python function that removes duplicates from a list."},{n:"Debugger",c:"Coding",i:"tools",d:"Find the cause of errors and propose fixes.",p:"Help me debug this error message: "},{n:"File Analyzer",c:"Documents",i:"folder",d:"Extract insights from documents and spreadsheets.",p:"Analyze the attached file and list the three most important findings."},{n:"Research Brief",c:"Research",i:"search",d:"Structured overviews with key sources.",p:"Create a research brief about coral reef restoration."},{n:"Image Studio",c:"Creative",i:"image",d:"Turn a description into a visual concept.",p:"Describe an image of a calm ocean at sunrise in a minimalist style."}];
+const CAPS=[{n:"AI Chat",i:"chat",d:"Natural conversations with history, code blocks and markdown.",p:"chat"},{n:"AI Search",i:"search",d:"Answers with sources and a dedicated search workspace.",p:"search"},{n:"Image Generation",i:"image",d:"Turn ideas into visuals. Needs an image engine.",p:"chat",q:"Create an image of a futuristic city at dusk."},{n:"Voice Assistant",i:"mic",d:"Hands-free voice conversations.",p:"chat",q:"Let's talk with voice."},{n:"Vision",i:"spark",d:"Understand images, screenshots and diagrams.",p:"chat",q:"Describe what is in this image."},{n:"Coding Assistant",i:"code",d:"Build, debug and review code.",p:"tools"},{n:"AI Agents",i:"folder",d:"Multi-step automations that work for you.",p:"projects"}];
+const PAGES={home:["Home","home"],chat:["Chat","chat"],search:["Search","search"],tools:["AI Tools","tools"],projects:["Projects","folder"],memory:["Memory","mem"],tasks:["Tasks","task"],discover:["Discover","disc"],settings:["Settings","gear"]};
+const NAVMAIN=["home","chat","search","tools","projects","memory","tasks","discover"];
+let cur="home",setTab="account",toolCat="All",taskF="All",memCat="All",memQ="",pending=null,web=false,typing=false;
+/* ---------- helpers ---------- */
+const ago=ts=>{const m=Math.max(1,Math.round((Date.now()-ts)/6e4));return m<60?m+"m ago":m<1440?Math.round(m/60)+"h ago":Math.round(m/1440)+"d ago"};
+const toast=m=>{if(!S.toasts)return;const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),2400)};
+function md(t){t=esc(t);const B=[];t=t.replace(/```(\w*)\n([\s\S]*?)```/g,(m,l,c)=>{B.push(`<pre><div><span>${l||"code"}</span><button class="chip" type="button" data-act="copycode">Copy</button></div><code>${c}</code></pre>`);return "\u0000"+(B.length-1)+"\u0000"});
+ t=t.replace(/^## (.+)$/gm,"<h3>$1</h3>").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`([^`]+)`/g,'<code class="ic2">$1</code>');
+ t=t.replace(/(?:^|\n)((?:- .+(?:\n|$))+)/g,(m,l)=>"<ul>"+l.trim().split("\n").map(x=>"<li>"+x.slice(2)+"</li>").join("")+"</ul>");
+ return t.replace(/\n/g,"<br>").replace(/<br>(<\/?(?:ul|h3|pre))/g,"$1").replace(/(<\/(?:ul|h3|pre)>)<br>/g,"$1").replace(/\u0000(\d+)\u0000/g,(m,i)=>B[i])}
+const DEMO=[[/python|code|function|bug|script|javascript|debug/i,"Here is a **demo** answer with a code block:\n```python\ndef unique(items):\n    seen = set()\n    return [x for x in items if not (x in seen or seen.add(x))]\n```\nThe function keeps the original order and removes duplicates."],[/image|draw|picture|visual/i,"## Demo concept\n- **Scene:** calm ocean at sunrise\n- **Style:** minimalist, soft purple light\n- **Mood:** quiet and hopeful\n\nA real image engine is not connected in this prototype."],[/plan|schedule|trip|checklist|week/i,"## Demo plan\n- Define the goal and a deadline\n- Break it into three small steps\n- Schedule the first step today\n- Review progress at the end of the week"],[/./,"This is a **demo response**. The interface is ready, but no AI engine is connected yet. Your message was: “MSG”."]];
+const demoReply=t=>{const r=DEMO.find(x=>x[0].test(t));return r[1].replace("MSG",t.slice(0,80).replace(/[$&]/g,""))};
+const SRC=["docs.example.org","wiki.example.com","news.example.net"];
+/* ---------- shell ---------- */
+function drawSide(){const nb=(p,l=PAGES[p][0])=>`<button class="nb" data-act="go" data-p="${p}" data-tip="${l}" ${cur===p?'aria-current="page"':""}>${ic(PAGES[p][1])}<span>${l}</span></button>`;
+ $("#side").innerHTML=`<div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 4H28V9H22V20C22 26 18 29 12 29C9.500 29 7.500 28.400 6 27.500L8.200 23C9.200 23.600 10.400 24 11.800 24C14.500 24 16 22.600 16 20V9H10Z" fill="url(#lg)"/></svg><b>JivanOS</b></div>${NAVMAIN.map(p=>nb(p)).join("")}<div class="sp"></div>${nb("settings")}<button class="nb" data-act="theme" data-tip="Appearance">${ic("pal")}<span>Appearance</span></button><button class="uc" data-act="profile" aria-haspopup="true" aria-label="Profile menu"><span class="av">${esc(S.name[0]||"J").toUpperCase()}</span><div><b>${esc(S.name)}</b><small>Pro plan · demo</small></div>${ic("chev")}</button>`;
+ const bn=[["home","Home"],["chat","Chat"],["search","Search"],["tasks","Tasks"]].map(([p,l])=>`<button data-act="go" data-p="${p}" ${cur===p?'aria-current="page"':""}>${ic(PAGES[p][1])}${l}</button>`).join("")+`<button data-act="more">${ic("menu")}More</button>`;$("#bn").innerHTML=bn;
+ $("#avb").textContent=(S.name[0]||"J").toUpperCase();$("#thb").innerHTML=ic(S.theme==="dark"?"sun":"moon");const u=notifs.filter(n=>!n.r).length;$("#nbd").textContent=u;$("#nbd").style.display=u&&S.badge?"grid":"none"}
+function applyS(){document.documentElement.dataset.theme=S.theme==="light"?"light":"dark";document.documentElement.style.setProperty("--p",S.accent);document.documentElement.style.setProperty("--p2",`color-mix(in srgb,${S.accent} 70%,#fff)`);
+ $("#app").classList.toggle("col",S.col);document.body.classList.toggle("compact",S.density==="compact");document.body.classList.toggle("nomotion",!S.motion);drawSide();persist()}
+function go(p){if(location.hash!=="#"+p)location.hash=p;else render()}
+function render(){cur=PAGES[location.hash.slice(1)]?location.hash.slice(1):"home";const pg=$("#page");pg.className="page"+(cur==="chat"?" chatp":"");$("#ptitle").textContent=PAGES[cur][0];pg.innerHTML=VIEW[cur]();drawSide();if(cur==="chat")afterChat();document.title=PAGES[cur][0]+" · JivanOS"}
+/* ---------- views ---------- */
+const greet=()=>{const h=new Date().getHours();return h<12?"Good morning":h<17?"Good afternoon":h<21?"Good evening":"Good night"};
+const composer=(id,ph)=>`<form class="bar" data-form="${id}"><button class="ib" type="button" data-act="attach" aria-label="Attach a file">${ic("clip")}</button><input id="${id}In" autocomplete="off" placeholder="${ph}" aria-label="${ph}"><button class="ib ${web?"on":""}" type="button" data-act="web" aria-pressed="${web}" aria-label="Toggle web search" title="Web search (demo)">${ic("globe")}</button><button class="ib" type="button" data-act="mic" aria-label="Voice input" title="Voice input">${ic("mic")}</button><button class="send" aria-label="Send">${ic("send")}</button></form>`;
+const QA=[["pen","Create","Generate text, ideas and more.","Help me brainstorm five creative names for a new product."],["chart","Analyze","Get insights from your data.","Analyze the pros and cons of working from home."],["code","Code","Build, debug and improve.","Write a Python function that removes duplicates from a list."],["search","Explore","Search and learn with AI.","Plan a two-day trip to Shiraz."]];
+const VIEW={
+home(){const due=tasks.filter(t=>!t.d).length;return `<div class="wrap"><div style="margin:6px 0 22px"><h1>${greet()}, ${esc(S.name)} 👋</h1><p class="sub">How can I help you today?</p></div>${composer("ask","Ask me anything…")}
+<div class="grid g4 quick" style="margin-top:18px">${QA.map(q=>`<button class="card tile" data-act="starter" data-q="${esc(q[3])}"><div class="ico">${ic(q[0])}</div><b>${q[1]}</b><small>${q[2]}</small></button>`).join("")}</div>
+<div class="sec"><h3>Recent conversations</h3><button class="chip" data-act="go" data-p="chat">View all ${ic("chev")}</button></div><div class="card" style="padding:6px var(--pad)">${chats.slice(0,4).map(c=>`<button class="row" data-act="open" data-id="${c.id}"><span class="ico">${ic("chat")}</span><span class="t">${esc(c.title)}</span><span class="sub" style="font-size:12.500px">${ago(c.ts)}</span></button>`).join("")||'<div class="empty">No conversations yet.</div>'}</div>
+<div class="sec"><h3>Featured capability</h3><button class="chip" data-act="go" data-p="discover">See all ${ic("chev")}</button></div>
+<div class="card feat"><div><span class="pill pv">UI preview</span><h3 style="font-size:21px;margin:10px 0 6px">Image Generation</h3><p class="sub" style="font-size:13px;margin-bottom:14px;max-width:420px">Turn your ideas into stunning visuals. The interface is ready; an image engine still needs to be connected.</p><button class="btn sm" data-act="cap" data-i="2">Learn more ${ic("chev")}</button></div><div class="art" aria-hidden="true"><div class="orb"></div></div></div>
+<div class="sec"><h3>Workspace shortcuts</h3></div><div class="grid g3"><button class="card tile" data-act="go" data-p="tasks"><b>${due} open tasks</b><small>Plan your day</small></button><button class="card tile" data-act="go" data-p="memory"><b>${mems.length} memories</b><small>What Jivan knows</small></button><button class="card tile" data-act="go" data-p="projects"><b>${projs.length} projects</b><small>Your workspaces</small></button></div></div>`},
+chat(){return `<div class="chat"><aside class="hist" id="hist"><button class="btn" data-act="newchat">${ic("plus")} New conversation</button><input class="f" id="hq" placeholder="Search conversations" aria-label="Search conversations" style="margin:0"><div class="hl" id="hl"></div></aside><section class="cm"><div class="ch"><button class="ib" data-act="hist" id="hbtn" aria-label="Toggle history" style="display:none">${ic("hist")}</button><h3 id="ct">New conversation</h3><button class="btn ghost sm" data-act="clear">Clear</button></div><div class="demo">Demo mode — replies are scripted samples. No AI engine is connected.</div><div class="msgs" id="msgs" aria-live="polite"></div><div class="comp"><div id="fchip"></div>${composer("chat","Message Jivan…")}</div></section></div>`},
+search(){return `<div class="wrap"><h1>Search</h1><p class="sub" style="margin:2px 0 16px">Search your workspace and ask for a sample answer.</p>${composer("srch","Search or ask anything…")}<div id="sres" style="margin-top:20px"></div></div>`},
+tools(){const cats=["All",...new Set(TOOLS.map(t=>t.c))];return `<div class="wrap"><h1>AI Tools</h1><p class="sub" style="margin:2px 0 14px">Pick a tool to start a conversation with a ready prompt.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">${cats.map(c=>`<button class="chip" data-act="tcat" data-c="${c}" aria-pressed="${toolCat===c}">${c}</button>`).join("")}</div><div class="grid">${TOOLS.map((t,i)=>({t,i})).filter(x=>toolCat==="All"||x.t.c===toolCat).map(({t,i})=>`<button class="card tile" data-act="tool" data-i="${i}"><div class="ico">${ic(t.i)}</div><b>${t.n}</b><small>${t.d}</small><span class="pill pv" style="display:inline-block;margin-top:10px">${t.c}</span></button>`).join("")}</div></div>`},
+projects(){return `<div class="wrap"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px"><div><h1>Projects</h1><p class="sub">Persistent workspaces for your ideas and files.</p></div><button class="btn" data-act="newproj">${ic("plus")} New project</button></div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${projs.map(p=>`<button class="card tile" data-act="proj" data-id="${p.id}"><div style="display:flex;justify-content:space-between"><div class="ico">${ic("folder")}</div><span class="sub" style="font-size:12px">${esc(p.u)}</span></div><b style="font-size:16px">${esc(p.n)}</b><small>${esc(p.d)}</small><div class="prog" style="margin:14px 0 6px"><i style="width:${p.pr}%"></i></div><small>${p.pr}% · ${p.f} files</small></button>`).join("")||'<div class="empty">No projects yet.</div>'}</div></div>`},
+memory(){return `<div class="wrap"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px"><div><h1>Memory</h1><p class="sub">What Jivan remembers about you. Edit or remove anything.</p></div><button class="btn" data-act="newmem">${ic("plus")} Add memory</button></div><div class="bar" style="margin-bottom:12px"><span style="color:var(--tx2);display:grid">${ic("search")}</span><input data-in="memq" placeholder="Search memories" aria-label="Search memories" value="${esc(memQ)}"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">${["All","Personal","Work","Preferences"].map(c=>`<button class="chip" data-act="mcat" data-c="${c}" aria-pressed="${memCat===c}">${c}</button>`).join("")}</div><div id="mlist"></div></div>`},
+tasks(){return `<div class="wrap" style="max-width:820px"><h1>Tasks & Reminders</h1><p class="sub" style="margin:2px 0 16px"><span id="tcount"></span></p><form class="bar" data-form="task" style="margin-bottom:14px"><input id="taskIn" placeholder="Add a task…" autocomplete="off" aria-label="New task"><select class="f" id="taskP" style="width:auto;margin:0" aria-label="Priority"><option value="hi">High</option><option value="me" selected>Medium</option><option value="lo">Low</option></select><select class="f" id="taskD" style="width:auto;margin:0" aria-label="Due"><option>Today</option><option>Tomorrow</option><option>This week</option></select><button class="send" aria-label="Add task">${ic("plus")}</button></form><div style="display:flex;gap:8px;margin-bottom:12px">${["All","Active","Done"].map(c=>`<button class="chip" data-act="tf" data-c="${c}" aria-pressed="${taskF===c}">${c}</button>`).join("")}</div><div class="card" style="padding:6px var(--pad)" id="tlist"></div></div>`},
+discover(){return `<div class="wrap"><h1>Discover</h1><p class="sub" style="margin:2px 0 16px">Everything JivanOS is built to do. Interfaces are ready; engines connect later.</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">${CAPS.map((c,i)=>`<button class="card tile" data-act="cap" data-i="${i}" style="min-height:150px;background:linear-gradient(150deg,color-mix(in srgb,var(--p) 14%,var(--sf)),var(--sf))"><div style="display:flex;justify-content:space-between"><div class="ico">${ic(c.i)}</div><span class="pill pv" style="height:fit-content">UI preview</span></div><b style="font-size:16px">${c.n}</b><small>${c.d}</small></button>`).join("")}</div></div>`},
+settings(){const T=[["account","Account"],["appearance","Appearance"],["notifications","Notifications"],["privacy","Privacy"],["general","General"]];
+ const tg=(k,t,d)=>`<div class="set"><div><b>${t}</b><small>${d}</small></div><button class="tg" data-act="tog" data-k="${k}" aria-pressed="${S[k]}" aria-label="${t}"></button></div>`;
+ const P={account:`<div class="set"><div><b>Display name</b><small>Used in your greeting and avatar.</small></div><input class="f" style="width:220px;margin:0" data-in="name" value="${esc(S.name)}" maxlength="24" aria-label="Display name"></div><div class="set"><div><b>Plan</b><small>Demo data — billing is not connected.</small></div><span class="pill pv">Pro · demo</span></div>`,
+ appearance:`<div class="set"><b>Theme</b><div class="seg">${["dark","light"].map(t=>`<button data-act="sth" data-v="${t}" aria-pressed="${S.theme===t}">${t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div></div><div class="set"><b>Accent color</b><div class="seg">${["#8b5cf6","#a855f7","#5f8dff","#14b8a6","#ec4899"].map(c=>`<button class="sw" style="background:${c}" data-act="acc" data-v="${c}" aria-pressed="${S.accent===c}" aria-label="Accent ${c}"></button>`).join("")}</div></div><div class="set"><b>Density</b><div class="seg">${["comfortable","compact"].map(t=>`<button data-act="den" data-v="${t}" aria-pressed="${S.density===t}">${t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div></div>${tg("motion","Animations","Smooth transitions across the interface.")}`,
+ notifications:tg("toasts","Pop-up messages","Short confirmations such as “Saved”.")+tg("badge","Notification badge","Show the unread count on the bell."),
+ privacy:tg("save","Save conversations in this browser","When off, chats disappear when you close the tab.")+`<div class="set"><div><b>Clear local data</b><small>Removes chats, tasks, memories and settings stored in this browser.</small></div><button class="btn dng sm" data-act="wipe">Clear data</button></div>`,
+ general:`<div class="set"><div><b>Keyboard shortcuts</b><small>Ctrl K search · Ctrl B toggle sidebar · Esc close dialogs</small></div></div><div class="set"><div><b>About</b><small>JivanOS frontend prototype · no backend connected</small></div></div>`};
+ return `<div class="wrap"><h1 style="margin-bottom:16px">Settings</h1><div class="sg"><div class="sn" role="tablist">${T.map(([k,l])=>`<button data-act="stab" data-k="${k}" aria-current="${setTab===k}">${l}</button>`).join("")}</div><div class="card" style="padding-block:6px">${P[setTab]}</div></div></div>`}};
+/* ---------- chat logic ---------- */
+function histList(){const q=($("#hq")||{}).value||"";$("#hl").innerHTML=chats.filter(c=>c.title.toLowerCase().includes(q.toLowerCase())).map(c=>`<div class="hi2" ${c.id===cc?'aria-current="true"':""}><button style="all:unset;flex:1;min-width:0;cursor:pointer;display:flex" data-act="open" data-id="${c.id}"><span>${esc(c.title)}</span></button><button class="ib" style="width:26px;height:26px" data-act="delchat" data-id="${c.id}" aria-label="Delete conversation">${ic("trash")}</button></div>`).join("")||'<div class="empty">Nothing here.</div>'}
+function msgHTML(m){return m.r==="u"?`<div class="m u"><div class="bub">${md(m.x)}</div></div>`:`<div class="m b"><span class="av" aria-hidden="true">J</span><div class="bub">${md(m.x)}<div class="meta"><span class="pill pv">Demo response</span>${m.s?m.s.map(s=>`<span class="chip">${s}</span>`).join(""):""}<button class="chip" data-act="copymsg" type="button">Copy</button></div></div></div>`}
+function afterChat(){histList();const c=chats.find(x=>x.id===cc);$("#ct").textContent=c?c.title:"New conversation";const box=$("#msgs");
+ if(!c||!c.m.length)box.innerHTML=`<div class="cs"><div class="ico" style="width:52px;height:52px">${ic("spark")}</div><h3>How can I help?</h3><p class="sub">Start a conversation, or pick a tool from the sidebar.</p></div>`;else{box.innerHTML=c.m.map(msgHTML).join("");box.scrollTop=box.scrollHeight}
+ const hb=$("#hbtn");hb.style.display=innerWidth<=1100?"grid":"none";drawChip()}
+function drawChip(){$("#fchip").innerHTML=pending?`<span class="chipf">${ic("clip")} ${esc(pending)} <button class="ib" style="width:24px;height:24px" data-act="unattach" aria-label="Remove attachment">${ic("x")}</button></span>`:""}
+function newChat(){const c={id:uid(),title:"New conversation",ts:Date.now(),m:[]};chats.unshift(c);cc=c.id;persist();return c}
+function sendMsg(text){text=text.trim();if(!text||typing)return;let c=chats.find(x=>x.id===cc);if(!c||(c.m.length&&false))c=newChat();
+ if(!c.m.length)c.title=text.slice(0,42);const shown=text+(pending?`\n📎 ${pending}`:"");c.m.push({r:"u",x:shown});c.ts=Date.now();pending=null;
+ if(cur!=="chat"){location.hash="chat";return setTimeout(()=>reply(c,text),60)}
+ afterChat();reply(c,text)}
+function reply(c,text){typing=true;const box=$("#msgs");const ph=document.createElement("div");ph.className="m b";ph.innerHTML='<span class="av" aria-hidden="true">J</span><div class="bub"><span class="dots" aria-label="Jivan is typing"><i></i><i></i><i></i></span></div>';box.append(ph);box.scrollTop=box.scrollHeight;
+ setTimeout(()=>{typing=false;const m={r:"b",x:demoReply(text)};if(web)m.s=SRC;c.m.push(m);c.ts=Date.now();persist();if(cur==="chat"&&cc===c.id){afterChat()}},900)}
+function mlist(){const q=memQ.toLowerCase(),L=mems.filter(m=>(memCat==="All"||m.c===memCat)&&m.x.toLowerCase().includes(q));$("#mlist").innerHTML=`<div class="card" style="padding:6px var(--pad)">${L.map(m=>`<div class="row"><span class="t" style="white-space:normal">${esc(m.x)}</span><span class="pill pv">${m.c}</span><span title="Importance" style="color:var(--p2);letter-spacing:2px">${"●".repeat(m.i)}${"○".repeat(3-m.i)}</span><button class="ib" data-act="delmem" data-id="${m.id}" aria-label="Delete memory">${ic("trash")}</button></div>`).join("")||'<div class="empty">No memories match.</div>'}</div>`}
+function tlist(){const L=tasks.filter(t=>taskF==="All"||(taskF==="Done"?t.d:!t.d));$("#tcount").textContent=tasks.filter(t=>!t.d).length+" open · "+tasks.filter(t=>t.d).length+" done";$("#tlist").innerHTML=L.map(t=>`<div class="row tk ${t.d?"dn":""}"><input type="checkbox" data-act="tdone" data-id="${t.id}" ${t.d?"checked":""} aria-label="Complete ${esc(t.t)}"><span class="t" style="white-space:normal">${esc(t.t)}</span><span class="sub" style="font-size:12px">${t.due}</span><span class="pill ${t.p}">${{hi:"High",me:"Medium",lo:"Low"}[t.p]}</span><button class="ib" data-act="deltask" data-id="${t.id}" aria-label="Delete task">${ic("trash")}</button></div>`).join("")||'<div class="empty">Nothing here.</div>'}
+function sres(q){const box=$("#sres");q=q.trim();if(!q){box.innerHTML="";return}const l=q.toLowerCase();
+ const hits=[...chats.filter(c=>c.title.toLowerCase().includes(l)).map(c=>["chat","Conversation",c.title,()=>{cc=c.id;go("chat")}]),...mems.filter(m=>m.x.toLowerCase().includes(l)).map(m=>["mem","Memory",m.x,()=>go("memory")]),...tasks.filter(t=>t.t.toLowerCase().includes(l)).map(t=>["task","Task",t.t,()=>go("tasks")])];sres.h=hits;
+ box.innerHTML=`<div class="card"><span class="pill pv">Demo answer</span><p style="margin:10px 0">${md(demoReply(q))}</p><div class="meta">${SRC.map(s=>`<span class="chip">${ic("globe")} ${s}</span>`).join("")}</div></div><div class="sec"><h3>In your workspace</h3></div><div class="card" style="padding:6px var(--pad)">${hits.map((h,i)=>`<button class="row" data-act="sres" data-i="${i}"><span class="ico">${ic(h[0])}</span><span class="t">${esc(h[2])}</span><span class="sub" style="font-size:12px">${h[1]}</span></button>`).join("")||'<div class="empty">No matches in your workspace.</div>'}</div>`}
+/* ---------- overlays ---------- */
+let lastFocus=null;
+function modal(html,onOpen){closeModal();lastFocus=document.activeElement;const d=document.createElement("div");d.className="mb";d.id="mb";d.innerHTML=`<div class="mo" role="dialog" aria-modal="true">${html}</div>`;document.body.append(d);const f=$("input,textarea,button",d);f&&f.focus();onOpen&&onOpen(d)}
+function closeModal(){const d=$("#mb");if(d){d.remove();lastFocus&&lastFocus.focus&&lastFocus.focus()}}
+function closeDD(){$$(".dd").forEach(x=>x.remove())}
+function dropdown(btn,html){const had=$(".dd");closeDD();if(had&&had.dataset.o===btn.id)return;const r=btn.getBoundingClientRect(),d=document.createElement("div");d.className="dd";d.dataset.o=btn.id||"x";d.innerHTML=html;document.body.append(d);const w=d.offsetWidth;d.style.top=Math.min(r.bottom+8,innerHeight-d.offsetHeight-8)+"px";d.style.left=Math.max(8,Math.min(innerWidth-w-8,document.dir==="rtl"?r.left:r.right-w))+"px"}
+/* ---------- actions ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=null;
+const ACT={
+go:el=>{closeDD();go(el.dataset.p)},collapse:()=>{S.col=!S.col;applyS()},theme:()=>{S.theme=S.theme==="dark"?"light":"dark";applyS();if(cur==="settings")render()},
+more:el=>modal(`<h3>More</h3><div class="grid" style="margin-top:12px;grid-template-columns:1fr 1fr">${["tools","projects","memory","discover","settings"].map(p=>`<button class="card tile" data-act="mgo" data-p="${p}"><div class="ico">${ic(PAGES[p][1])}</div><b>${PAGES[p][0]}</b></button>`).join("")}</div>`),
+mgo:el=>{closeModal();go(el.dataset.p)},
+starter:el=>{const c=newChat();pending=null;location.hash="chat";setTimeout(()=>{$("#chatIn").value=el.dataset.q;$("#chatIn").focus()},60)},
+open:el=>{cc=el.dataset.id;if(cur==="chat"){$("#hist").classList.remove("open");afterChat()}else go("chat")},
+newchat:()=>{const c=newChat();pending=null;afterChat();$("#chatIn").focus()},
+delchat:el=>{chats=chats.filter(c=>c.id!==el.dataset.id);if(cc===el.dataset.id)cc=null;persist();afterChat()},
+clear:()=>{const c=chats.find(x=>x.id===cc);if(c){c.m=[];c.title="New conversation";persist();afterChat();toast("Conversation cleared")}},
+hist:()=>$("#hist").classList.toggle("open"),
+attach:()=>$("#fileIn").click(),unattach:()=>{pending=null;drawChip()},
+web:el=>{web=!web;$$('[data-act=web]').forEach(b=>{b.classList.toggle("on",web);b.setAttribute("aria-pressed",web)});toast(web?"Web search on (demo sources)":"Web search off")},
+mic:el=>{if(!SR)return toast("Voice input is not supported in this browser");if(rec){rec.stop();return}const inp=el.closest("form").querySelector("input");rec=new SR();rec.lang="en-US";rec.interimResults=true;const base=inp.value;el.classList.add("on");rec.onresult=e=>{inp.value=(base?base+" ":"")+[...e.results].map(r=>r[0].transcript).join("")};rec.onerror=()=>toast("Microphone error");rec.onend=()=>{rec=null;el.classList.remove("on")};rec.start()},
+copycode:el=>{navigator.clipboard&&navigator.clipboard.writeText($("code",el.closest("pre")).textContent).then(()=>toast("Code copied"),()=>toast("Copy failed"))},
+copymsg:el=>{navigator.clipboard&&navigator.clipboard.writeText(el.closest(".bub").innerText).then(()=>toast("Copied"),()=>toast("Copy failed"))},
+tcat:el=>{toolCat=el.dataset.c;render()},
+tool:el=>{const t=TOOLS[el.dataset.i];modal(`<div class="ico">${ic(t.i)}</div><h3>${t.n}</h3><p class="sub">${t.d}</p><label class="l" style="margin-top:14px">Starter prompt</label><textarea class="f" rows="3" id="tp">${esc(t.p)}</textarea><div class="acts"><button class="btn ghost" data-act="closem">Cancel</button><button class="btn" data-act="usetool">Open in chat</button></div>`)},
+usetool:()=>{const v=$("#tp").value;closeModal();newChat();location.hash="chat";setTimeout(()=>{$("#chatIn").value=v;$("#chatIn").focus()},60)},closem:closeModal,
+cap:el=>{const c=CAPS[el.dataset.i];modal(`<span class="pill pv">UI preview</span><h3 style="margin-top:10px">${c.n}</h3><p class="sub">${c.d}</p><p class="sub" style="margin-top:8px;font-size:13px">This prototype shows the interface only. The engine behind it is not connected.</p><div class="acts"><button class="btn ghost" data-act="closem">Close</button><button class="btn" data-act="capgo" data-i="${el.dataset.i}">${c.q?"Try a sample prompt":"Open"}</button></div>`)},
+capgo:el=>{const c=CAPS[el.dataset.i];closeModal();if(c.q){newChat();location.hash="chat";setTimeout(()=>{$("#chatIn").value=c.q;$("#chatIn").focus()},60)}else go(c.p)},
+proj:el=>{const p=projs.find(x=>x.id===el.dataset.id);modal(`<h3>${esc(p.n)}</h3><p class="sub">${esc(p.d)}</p><div class="prog" style="margin:14px 0 6px"><i style="width:${p.pr}%"></i></div><small class="sub">${p.pr}% complete · ${p.f} files</small><h3 style="font-size:14px;margin:16px 0 4px">Recent activity</h3>${p.a.map(a=>`<div class="row" style="padding:8px 0"><span class="t" style="white-space:normal">${esc(a)}</span></div>`).join("")}<div class="acts"><button class="btn dng sm" data-act="delproj" data-id="${p.id}">Delete</button><button class="btn" data-act="closem">Close</button></div>`)},
+delproj:el=>{projs=projs.filter(p=>p.id!==el.dataset.id);persist();closeModal();render();toast("Project deleted")},
+newproj:()=>modal(`<h3>New project</h3><form data-form="proj"><label class="l">Name</label><input class="f" id="pn" required maxlength="40"><label class="l">Description</label><input class="f" id="pd" maxlength="80"><div class="acts"><button type="button" class="btn ghost" data-act="closem">Cancel</button><button class="btn">Create</button></div></form>`),
+newmem:()=>modal(`<h3>Add memory</h3><form data-form="mem"><label class="l">What should Jivan remember?</label><textarea class="f" id="mx" rows="3" required maxlength="200"></textarea><label class="l">Category</label><select class="f" id="mc"><option>Personal</option><option>Work</option><option>Preferences</option></select><div class="acts"><button type="button" class="btn ghost" data-act="closem">Cancel</button><button class="btn">Save</button></div></form>`),
+delmem:el=>{mems=mems.filter(m=>m.id!==el.dataset.id);persist();mlist()},mcat:el=>{memCat=el.dataset.c;$$('[data-act=mcat]').forEach(b=>b.setAttribute("aria-pressed",b===el));mlist()},
+tf:el=>{taskF=el.dataset.c;$$('[data-act=tf]').forEach(b=>b.setAttribute("aria-pressed",b===el));tlist()},
+tdone:el=>{const t=tasks.find(x=>x.id===el.dataset.id);t.d=el.checked;persist();tlist()},deltask:el=>{tasks=tasks.filter(t=>t.id!==el.dataset.id);persist();tlist()},
+sres:el=>sres.h[el.dataset.i][3](),
+stab:el=>{setTab=el.dataset.k;render()},sth:el=>{S.theme=el.dataset.v;applyS();render()},acc:el=>{S.accent=el.dataset.v;applyS();render()},den:el=>{S.density=el.dataset.v;applyS();render()},
+tog:el=>{S[el.dataset.k]=!S[el.dataset.k];applyS();render()},
+wipe:()=>modal(`<h3>Clear all local data?</h3><p class="sub">This removes conversations, tasks, memories, projects and settings from this browser.</p><div class="acts"><button class="btn ghost" data-act="closem">Cancel</button><button class="btn dng" data-act="wipe2">Clear everything</button></div>`),
+wipe2:()=>{try{Object.keys(localStorage).filter(k=>k.startsWith("jv6.")).forEach(k=>localStorage.removeItem(k))}catch(e){}location.hash="home";location.reload()},
+notifs:el=>{const u=notifs.some(n=>!n.r);dropdown(el,`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px"><b>Notifications</b><button class="chip" data-act="readall">Mark all read</button></div>${notifs.map(n=>`<div class="row nt ${n.r?"":"un"}"><div class="t"><b style="font-size:13.500px">${esc(n.t)}</b><div class="sub" style="font-size:12.500px">${esc(n.x)}</div></div><span class="sub" style="font-size:11px">${n.w}</span></div>`).join("")}`)},
+readall:()=>{notifs.forEach(n=>n.r=true);persist();drawSide();closeDD();toast("All caught up")},
+profile:el=>dropdown(el,`<div style="padding:8px 10px"><b>${esc(S.name)}</b><div class="sub" style="font-size:12.500px">Pro plan · demo data</div></div><hr><button class="row" data-act="editname">${ic("user")}<span class="t">Edit profile</span></button><button class="row" data-act="go" data-p="settings">${ic("gear")}<span class="t">Settings</span></button><button class="row" data-act="theme">${ic("pal")}<span class="t">Toggle appearance</span></button><button class="row" data-act="help">${ic("help")}<span class="t">Help</span></button><hr><button class="row" data-act="signout">${ic("out")}<span class="t">Sign out</span></button>`),
+editname:()=>{closeDD();modal(`<h3>Edit profile</h3><form data-form="name"><label class="l">Display name</label><input class="f" id="nn" value="${esc(S.name)}" maxlength="24" required><div class="acts"><button type="button" class="btn ghost" data-act="closem">Cancel</button><button class="btn">Save</button></div></form>`)},
+help:()=>{closeDD();modal(`<h3>Help</h3><p class="sub">Use the prompt box on Home to start a chat, or open AI Tools for ready-made prompts. Press <span class="kbd">Ctrl K</span> to search. All replies in this prototype are scripted demos.</p><div class="acts"><button class="btn" data-act="closem">Got it</button></div>`)},
+signout:()=>{closeDD();modal(`<h3>Sign out</h3><p class="sub">Accounts are not connected in this prototype, so there is nothing to sign out of yet.</p><div class="acts"><button class="btn" data-act="closem">OK</button></div>`)}
+};
+document.addEventListener("click",e=>{const el=e.target.closest("[data-act]");if(!e.target.closest(".dd")&&!el)closeDD();else if(!e.target.closest(".dd")&&el&&!["notifs","profile"].includes(el.dataset.act))closeDD();if(e.target.id==="mb")return closeModal();if(el&&ACT[el.dataset.act])ACT[el.dataset.act](el,e)});
+document.addEventListener("submit",e=>{const f=e.target.closest("[data-form]");if(!f)return;e.preventDefault();const k=f.dataset.form;
+ if(k==="ask"||k==="chat"){const i=$("input",f).value;if(!i.trim())return;$("input",f).value="";if(k==="ask"){newChat();}sendMsg(i)}
+ else if(k==="srch"){sres($("#srchIn").value)}
+ else if(k==="task"){const v=$("#taskIn").value.trim();if(!v)return;tasks.unshift({id:uid(),t:v,p:$("#taskP").value,due:$("#taskD").value,d:false});$("#taskIn").value="";persist();tlist();toast("Task added")}
+ else if(k==="mem"){mems.unshift({id:uid(),x:$("#mx").value.trim(),c:$("#mc").value,i:2});persist();closeModal();render();toast("Memory saved")}
+ else if(k==="proj"){projs.unshift({id:uid(),n:$("#pn").value.trim(),d:$("#pd").value.trim()||"New workspace",pr:0,f:0,u:"just now",a:["Project created"]});persist();closeModal();render();toast("Project created")}
+ else if(k==="name"){S.name=$("#nn").value.trim()||S.name;applyS();closeModal();render();toast("Profile updated")}});
+document.addEventListener("input",e=>{const k=e.target.dataset.in;if(k==="memq"){memQ=e.target.value;mlist()}else if(k==="name"){S.name=e.target.value||"Mahdi";persist();drawSide()}else if(e.target.id==="hq")histList();else if(e.target.id==="srchIn"&&!e.target.value)sres("")});
+$("#fileIn").addEventListener("change",e=>{const f=e.target.files[0];e.target.value="";if(!f)return;pending=f.name;if(cur!=="chat"){const c=newChat();location.hash="chat"}else drawChip();toast("Attached (demo): "+f.name)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeDD()}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();go("search")}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="b"){e.preventDefault();ACT.collapse()}});
+addEventListener("hashchange",()=>{closeDD();render();const p=$("#page");p.scrollTop=0;if(cur==="memory")mlist();if(cur==="tasks")tlist()});
+const mq=matchMedia("(max-width:1100px)");const rs=()=>{if(mq.matches&&!S.col&&!rs.u){S.col=true;rs.u=1}};rs();
+addEventListener("resize",()=>{if(cur==="chat"){const h=$("#hbtn");if(h)h.style.display=innerWidth<=1100?"grid":"none"}});
+const _render=render;render=function(){_render();if(cur==="memory")mlist();if(cur==="tasks")tlist()};
+applyS();render();
+})();
+</script>
+</body>
+</html>
